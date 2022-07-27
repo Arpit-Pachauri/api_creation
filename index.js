@@ -1,13 +1,31 @@
 const express= require("express");
 const app=express();
+// schema used when  creating documents
 const book= require("./model/book");
 const mongoose=require("mongoose");
 const { db } = require( "./model/book" );
 const { ObjectId } = require( "mongodb" );
+const User=require('./model/user');
+const dotenv=require('dotenv');
+dotenv.config({path: './config.env'});
+const Database=process.env.DaTABASE;
+const Port=process.env.PORT;
+app.use(require('./router/auth'));
+// console.log(db);
+// console.log(book);
 
+app.use(express.json());    
 
-app.use(express.json());
-
+// book.create({
+//     "title": "hume",
+//     "author": "Frank Herbert",
+//     "pages": 500,
+//     "genres": [
+//         "sci-fi",
+//         "dystopian"
+//     ],
+//     "rating": 10
+// })
 
 app.get("/",(req,res)=>{
     res.send("Welcome to home page");
@@ -92,9 +110,9 @@ app.patch('/books/:id',(req,res)=>{
 })
 
 
-mongoose.connect("mongodb://localhost:27017",()=>{
+mongoose.connect(Database,()=>{
     console.log("db connected");
-    app.listen(5000,()=>{
-        console.log("Listening at port no. 5000");
+    app.listen(Port,()=>{
+        console.log(`Listening at port no. ${Port}`);
     });
 })
